@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <meta charset="utf-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Stylish Product Management</title>
+  <style>
+    body {
+      font-size: 16px;
+      font-family: 'Noto Sans TC', '微軟正黑體', '新細明體', arial, sans-serif;
+      color: #3f3a3a;
+      line-height: 2.5em;
+    }
+
+    table, th, td {
+      border: 1px solid black;
+    }
+
+    th {
+      background-color: #96D4D4;
+    }
+
+    td {
+      font-size: 80%;
+    }
+
+    textarea {
+      width: 400px;
+      height: 100px;
+      padding: 5px;
+    }
+
+    input {
+      width: 300px;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+<h3>Create a New Product</h3>
+<form method="post" action="/api/1.0/admin/product" th:object="${productForm}" enctype="multipart/form-data">
+  Category
+  <select name="category">
+    <option value="women">Women</option>
+    <option value="men">Men</option>
+    <option value="accessories">Accessories</option>
+  </select
+  ><br/>
+  Title <input type="text" name="title"/><br/>
+  Description<br/><textarea name="description"></textarea><br/>
+  Price <input type="text" name="price"/>
+  <hr/>
+  Texture <input type="text" name="texture"/><br/>
+  Wash <input type="text" name="wash"/><br/>
+  Place of Production <input type="text" name="place"/><br/>
+  Note <input type="text" name="note"/>
+  <hr/>
+  Color Id <input type="text" value="1,2" th:field="*{colorIds}"/><br/>
+  Sizes <input type="text" name="sizes" value="S,M,L,XL,F"/>
+  <hr/>
+  Story<br/><textarea name="story"></textarea><br/>
+  Main Image <input type="file" name="main_image" th:field="*{mainImage}"/><br/>
+  Other Images <br/>
+  <input type="file" name="other_image[]" th:field="*{otherImages}"/><br/>
+  <input type="file" name="other_image[]" th:field="*{otherImages}"/><br/>
+  <br/>
+  <input type="submit" value="Create"/>
+
+  <div class="productList" th:unless="${#lists.isEmpty(currentProducts)}">
+    <h2>Current Products</h2>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Category</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Texture</th>
+        <th>Wash</th>
+        <th>Place</th>
+        <th>Note</th>
+        <th>Story</th>
+        <th>Image</th>
+        <th colspan="4">Variants</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="cp : ${currentProducts}">
+        <td th:text="${cp.id}"></td>
+        <td th:text="${cp.category}"></td>
+        <td th:text="${cp.title}"></td>
+        <td th:text="${cp.description}"></td>
+        <td th:text="${cp.price}"></td>
+        <td th:text="${cp.texture}"></td>
+        <td th:text="${cp.wash}"></td>
+        <td th:text="${cp.place}"></td>
+        <td th:text="${cp.note}"></td>
+        <td th:text="${cp.story}"></td>
+        <td><img width="100" th:src="${cp.mainImage}"></td>
+        <td>
+          <table>
+            <tr th:each="v : ${cp.variants}">
+              <td th:width="100" th:text="${v.colorCode}"></td>
+              <td th:width="50" th:style="${'background-color: ' + v.colorCode + ';'}"></td>
+              <td th:width="50" th:text="${v.size}"></td>
+              <td th:width="50" th:text="${v.stock}"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</form>
+</body>
+<script src="/src/utils/fb.js"></script>
+<script src="/src/utils/api.js"></script>
+<script src="/src/utils/init.js"></script>
+<script>
+  const localStorage = window.localStorage;
+  $(document).on('submit', 'form', async function (event) {
+    event.preventDefault();
+    // return;
+    // if (!window.jwtToken) {
+    //   window.fb.login();
+    //   return;
+    // }
+    try {
+      let response = await fetch($(this).attr('action'), {
+        body: new FormData(this),
+        method: $(this).attr('method'),
+        headers: {
+          Authorization: 'Bearer ' + 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXNoQHRlc3QuY29tIiwidXNlclJvbGVzIjpbImFkbWluIl0sImlhdCI6MTcwMjg3Nzk4NiwiZXhwIjoxNzA1NDY5OTg2fQ.tDMWZo28dVASXAMSW_JnhYXg_30wXn8TPw5In-u-EqThjMpva3lfWhe5vj1KqLi9RI0jnkInjcUTk8qvHGk5Bg',
+        },
+      });
+      let result = await response.json();
+      console.log(result);
+    } catch (e) {
+      console.error(result);
+    }
+  });
+</script>
+</html>

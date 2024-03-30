@@ -9,9 +9,12 @@ import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.example.stylish.data.StylishResponse;
 import tw.appworks.school.example.stylish.data.dto.ProductDto;
+import tw.appworks.school.example.stylish.model.product.Comment;
 import tw.appworks.school.example.stylish.service.ProductService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -58,5 +61,15 @@ public class ProductsController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new StylishResponse<>(ret.stream().limit(pagingSize).toList(),
                         ret.size() > pagingSize ? paging.orElse(0) + 1 : null));
+    }
+
+    @PostMapping("/comments")
+    public ResponseEntity<?> postProductComments(@RequestBody Comment comment) {
+        logger.info("comment: " + comment);
+        productService.saveProductComment(comment);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("info", "Success.");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

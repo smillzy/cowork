@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tw.appworks.school.example.stylish.data.dto.ProductDto;
 import tw.appworks.school.example.stylish.data.form.ProductForm;
-import tw.appworks.school.example.stylish.model.product.Color;
-import tw.appworks.school.example.stylish.model.product.Product;
-import tw.appworks.school.example.stylish.model.product.ProductImage;
-import tw.appworks.school.example.stylish.model.product.Variant;
+import tw.appworks.school.example.stylish.model.product.*;
 import tw.appworks.school.example.stylish.repository.product.*;
 import tw.appworks.school.example.stylish.service.ProductService;
 import tw.appworks.school.example.stylish.service.StorageService;
@@ -45,16 +42,20 @@ public class ProductServiceImpl implements ProductService {
 
     private final ColorRepository colorRepository;
 
+    private final CommentRepository commentRepository;
+
     public static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     private String prefix;
 
     public ProductServiceImpl(ProductsRepository productsRepository, ProductImageRepository productImageRepository,
-                              VariantRepository variantRepository, ColorRepository colorRepository) {
+                              VariantRepository variantRepository, ColorRepository colorRepository,
+                              CommentRepository commentRepository) {
         this.productsRepository = productsRepository;
         this.productImageRepository = productImageRepository;
         this.variantRepository = variantRepository;
         this.colorRepository = colorRepository;
+        this.commentRepository = commentRepository;
     }
 
     private void createPrefix() {
@@ -129,6 +130,13 @@ public class ProductServiceImpl implements ProductService {
         })).toList();
         variantRepository.saveAll(variants);
     }
+
+    @Override
+    public void saveProductComment(Comment comment) {
+        logger.info("commentService: " + comment);
+        commentRepository.saveAll(comment);
+    }
+
 
     public List<ProductImage> saveProductImage(List<ProductImage> productImages) {
         return productImageRepository.saveAll(productImages);

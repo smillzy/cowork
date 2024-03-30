@@ -20,6 +20,8 @@ import tw.appworks.school.example.stylish.middleware.AdminCookieInterceptor;
 import tw.appworks.school.example.stylish.middleware.JwtTokenFilter;
 import tw.appworks.school.example.stylish.service.UserService;
 
+import java.util.Collections;
+
 @Configuration
 public class SecurityConfiguration {
 
@@ -79,7 +81,8 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
+//        config.addAllowedOrigin("*");
+        config.setAllowedOriginPatterns(Collections.singletonList("*"));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);

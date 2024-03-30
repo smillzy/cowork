@@ -4,6 +4,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import tw.appworks.school.example.stylish.data.dto.ProductDto;
 import tw.appworks.school.example.stylish.data.form.ProductForm;
+import tw.appworks.school.example.stylish.model.product.Comment;
 import tw.appworks.school.example.stylish.model.product.Product;
 
 import java.util.List;
@@ -22,5 +23,6 @@ public interface ProductService {
     Product saveProduct(Product product);
 
     void saveProduct(ProductForm productForm, StorageService storageService);
+    void saveProductComment(Comment comment);
 
 }

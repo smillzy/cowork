@@ -29,17 +29,24 @@ public class AdminCookieInterceptor extends OncePerRequestFilter {
                 logger.debug("add token: " + token + " to header");
                 mutableRequest.putHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
             });
-        } catch (Exception ignore) {
+        } catch (Exception ex) {
+            logger.error("Error occurred during request processing: " + ex.getMessage(), ex);
+            throw ex;
         } finally {
             filterChain.doFilter(mutableRequest, response);
         }
     }
 
+    // changed
     public Optional<String> readServletCookie(HttpServletRequest request, String name) {
-        return Arrays.stream(request.getCookies())
-                .filter(cookie -> name.equals(cookie.getName()))
-                .map(Cookie::getValue)
-                .findAny();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            return Arrays.stream(cookies)
+                    .filter(cookie -> name.equals(cookie.getName()))
+                    .map(Cookie::getValue)
+                    .findAny();
+        }
+        return Optional.empty();
     }
 
 }

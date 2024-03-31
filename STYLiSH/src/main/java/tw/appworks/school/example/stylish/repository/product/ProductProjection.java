@@ -34,8 +34,7 @@ public class ProductProjection implements IProductProjection {
 
     private String mainImage;
 
-    @Column(name = "avg_star")
-    private Float sold;
+    private Integer sold;
 
     private String size;
 

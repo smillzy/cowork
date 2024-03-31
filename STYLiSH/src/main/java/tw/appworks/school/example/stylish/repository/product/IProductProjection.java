@@ -26,8 +26,7 @@ public interface IProductProjection {
 
     String getMainImage();
 
-    @Column(name = "avg_star")
-    Float getSold();
+    Integer getSold();
 
     String getSize();
 

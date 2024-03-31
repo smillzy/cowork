@@ -58,21 +58,18 @@ public class ProductServiceImpl implements ProductService {
         this.commentRepository = commentRepository;
     }
 
-    private void createPrefix() {
-        StringBuilder builder = new StringBuilder(scheme + "://" + domain);
-        if (port != 80 && port != 443) {
-            builder.append(":").append(port);
-        }
-        builder.append("/");
-        this.prefix = builder.toString();
-    }
+//    private void createPrefix() {
+//        StringBuilder builder = new StringBuilder(scheme + "://" + domain);
+//        if (port != 80 && port != 443) {
+//            builder.append(":").append(port);
+//        }
+//        builder.append("/");
+//        this.prefix = builder.toString();
+//    }
 
     @Override
     public List<ProductDto> getProducts(@Nonnull String category, int pagingSize, int paging) {
         List<ProductProjection> products = getProductsProjections(category, pagingSize + 1, paging * pagingSize);
-        logger.info("pagingSizeService: " + pagingSize);
-        logger.info("pagingService: " + paging);
-        logger.info("productsService: " + products);
         return mapProjectionToDto(products);
     }
 
@@ -149,7 +146,6 @@ public class ProductServiceImpl implements ProductService {
         Map<Long, ProductDto> map = new HashMap<>();
         projections.forEach(mediatorProduct -> {
             ProductDto p = map.get(mediatorProduct.getId());
-            logger.info("pService: " + p);
             if (p == null) {
                 p = ProductDto.from(mediatorProduct);
             } else {
@@ -158,16 +154,14 @@ public class ProductServiceImpl implements ProductService {
             map.put(p.getId(), p);
         });
         List<ProductDto> ret = map.values().stream().toList();
-        logger.info("retService: " + ret);
-        ret.forEach(this::appendPrefix);
-        logger.info("retServiceAfterForeach: " + ret);
+//        ret.forEach(this::appendPrefix);
         return ret;
     }
 
-    private void appendPrefix(ProductDto dto) {
-        if (prefix == null) createPrefix();
-        dto.setMainImage(prefix + dto.getMainImage());
-        dto.setImages(dto.getImages().stream().map(image -> prefix + image).collect(Collectors.toSet()));
-    }
+//    private void appendPrefix(ProductDto dto) {
+//        if (prefix == null) createPrefix();
+//        dto.setMainImage(prefix + dto.getMainImage());
+//        dto.setImages(dto.getImages().stream().map(image -> prefix + image).collect(Collectors.toSet()));
+//    }
 
 }

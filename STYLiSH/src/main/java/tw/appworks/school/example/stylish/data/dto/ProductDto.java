@@ -29,7 +29,7 @@ public class ProductDto {
     private Integer price;
 
     @JsonProperty("sold")
-    private Float sold;
+    private Integer sold;
 
     @JsonProperty("texture")
     private String texture;

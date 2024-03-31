@@ -39,10 +39,8 @@ public class ProductsController {
 
         if (!category.matches("^(women|men|accessories|all)$"))
             throw new ServletRequestBindingException("Wrong Request");
-        logger.info("categoryController:" + category);
 
         List<ProductDto> ret = productService.getProducts(category, paging.orElse(0));
-        logger.info("retController:" + ret);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new StylishResponse<>(ret.stream().limit(pagingSize).toList(),
                         ret.size() > pagingSize ? paging.orElse(0) + 1 : null));
@@ -67,7 +65,6 @@ public class ProductsController {
 
     @PostMapping("/comments")
     public ResponseEntity<?> postProductComments(@RequestBody Comment comment) {
-        logger.info("comment: " + comment);
         productService.saveProductComment(comment);
 
         Map<String, Object> response = new HashMap<>();

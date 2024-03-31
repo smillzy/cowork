@@ -21,7 +21,7 @@ public class ProductProjectionRepositoryImpl implements ProductProjectionReposit
 
         String query = """
                     SELECT p.id, p.category, p.title, p.description, p.price, p.texture,
-                        p.wash, p.place, p.note, p.story, p.main_image as mainImage, p.avg_star,
+                        p.wash, p.place, p.note, p.story, p.main_image as mainImage, p.sold,
                         v.size, v.stock, i.image, c.code as colorCode, c.name as colorName
                     FROM
                     (SELECT * FROM product %s ORDER BY id DESC LIMIT %d OFFSET %d) p
@@ -31,9 +31,7 @@ public class ProductProjectionRepositoryImpl implements ProductProjectionReposit
                 """;
         String condition = category.equals("all") ? "" : "WHERE category = '" + category + "'";
         Query nativeQuery = entityManager.createNativeQuery(query.formatted(condition, pagingSize, offset), ProductProjection.class);
-        log.info("Query executed: " + nativeQuery);
         List<ProductProjection> productList = nativeQuery.getResultList();
-        log.info("Retrieved products: " + productList);
         return productList;
     }
 

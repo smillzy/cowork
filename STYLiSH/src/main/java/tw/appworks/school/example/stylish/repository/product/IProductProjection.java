@@ -1,5 +1,7 @@
 package tw.appworks.school.example.stylish.repository.product;
 
+import jakarta.persistence.Column;
+
 public interface IProductProjection {
 
     Long getId();
@@ -23,6 +25,9 @@ public interface IProductProjection {
     String getStory();
 
     String getMainImage();
+
+    @Column(name = "avg_star")
+    Float getSold();
 
     String getSize();
 

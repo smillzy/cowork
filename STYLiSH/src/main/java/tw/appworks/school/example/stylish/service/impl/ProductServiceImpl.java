@@ -70,6 +70,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getProducts(@Nonnull String category, int pagingSize, int paging) {
         List<ProductProjection> products = getProductsProjections(category, pagingSize + 1, paging * pagingSize);
+        logger.info("pagingSizeService: " + pagingSize);
+        logger.info("pagingService: " + paging);
+        logger.info("productsService: " + products);
         return mapProjectionToDto(products);
     }
 
@@ -146,6 +149,7 @@ public class ProductServiceImpl implements ProductService {
         Map<Long, ProductDto> map = new HashMap<>();
         projections.forEach(mediatorProduct -> {
             ProductDto p = map.get(mediatorProduct.getId());
+            logger.info("pService: " + p);
             if (p == null) {
                 p = ProductDto.from(mediatorProduct);
             } else {
@@ -154,7 +158,9 @@ public class ProductServiceImpl implements ProductService {
             map.put(p.getId(), p);
         });
         List<ProductDto> ret = map.values().stream().toList();
+        logger.info("retService: " + ret);
         ret.forEach(this::appendPrefix);
+        logger.info("retServiceAfterForeach: " + ret);
         return ret;
     }
 

@@ -1,6 +1,7 @@
 package tw.appworks.school.example.stylish.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import tw.appworks.school.example.stylish.repository.product.IProductProjection;
@@ -26,6 +27,9 @@ public class ProductDto {
 
     @JsonProperty("price")
     private Integer price;
+
+    @JsonProperty("sold")
+    private Float sold;
 
     @JsonProperty("texture")
     private String texture;
@@ -96,6 +100,7 @@ public class ProductDto {
         ret.setTitle(mp.getTitle());
         ret.setDescription(mp.getDescription());
         ret.setPrice(mp.getPrice());
+        ret.setSold(mp.getSold());
         ret.setTexture(mp.getTexture());
         ret.setWash(mp.getWash());
         ret.setPlace(mp.getPlace());

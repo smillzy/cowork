@@ -1,5 +1,6 @@
 package tw.appworks.school.example.stylish.repository.product;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -32,6 +33,9 @@ public class ProductProjection implements IProductProjection {
     private String story;
 
     private String mainImage;
+
+    @Column(name = "avg_star")
+    private Float sold;
 
     private String size;
 

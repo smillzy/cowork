@@ -39,8 +39,10 @@ public class ProductsController {
 
         if (!category.matches("^(women|men|accessories|all)$"))
             throw new ServletRequestBindingException("Wrong Request");
+        logger.info("categoryController:" + category);
 
         List<ProductDto> ret = productService.getProducts(category, paging.orElse(0));
+        logger.info("retController:" + ret);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new StylishResponse<>(ret.stream().limit(pagingSize).toList(),
                         ret.size() > pagingSize ? paging.orElse(0) + 1 : null));

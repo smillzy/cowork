@@ -2,10 +2,13 @@ package tw.appworks.school.example.stylish.repository.product;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+@Slf4j
 public class ProductProjectionRepositoryImpl implements ProductProjectionRepository {
 
     @PersistenceContext
@@ -18,7 +21,7 @@ public class ProductProjectionRepositoryImpl implements ProductProjectionReposit
 
         String query = """
                     SELECT p.id, p.category, p.title, p.description, p.price, p.texture,
-                        p.wash, p.place, p.note, p.story, p.main_image as mainImage,
+                        p.wash, p.place, p.note, p.story, p.main_image as mainImage, p.avg_star,
                         v.size, v.stock, i.image, c.code as colorCode, c.name as colorName
                     FROM
                     (SELECT * FROM product %s ORDER BY id DESC LIMIT %d OFFSET %d) p
@@ -27,9 +30,11 @@ public class ProductProjectionRepositoryImpl implements ProductProjectionReposit
                     LEFT JOIN product_images i ON v.product_id = i.product_id
                 """;
         String condition = category.equals("all") ? "" : "WHERE category = '" + category + "'";
-        return entityManager.createNativeQuery(query.formatted(condition, pagingSize, offset), ProductProjection.class)
-                .getResultList();
-
+        Query nativeQuery = entityManager.createNativeQuery(query.formatted(condition, pagingSize, offset), ProductProjection.class);
+        log.info("Query executed: " + nativeQuery);
+        List<ProductProjection> productList = nativeQuery.getResultList();
+        log.info("Retrieved products: " + productList);
+        return productList;
     }
 
 }
